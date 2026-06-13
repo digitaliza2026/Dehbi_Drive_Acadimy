@@ -4,9 +4,11 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'fram
 import { Car, Bike, BookOpen, Wrench, Shield, Award, Users, MapPin, ChevronRight, Star, Quote, ArrowRight } from 'lucide-react';
 import AnimatedCounter from '../components/AnimatedCounter';
 import SectionHeader from '../components/SectionHeader';
-import { SpeedSign, PrioritySign } from '../components/RoadSign';
+import { SpeedSign, PrioritySign, DirectionSign, StopSign, YieldSign, WarningSign } from '../components/RoadSign';
 import { useSettings } from '../context/SettingsContext';
 import { apiUrl } from '../lib/apiBase';
+import { seedFormations, seedTemoignages } from '../lib/seedData';
+import { useIsMobile } from '../lib/useIsMobile';
 
 interface Formation { id: string; title: string; category: string; price: string; duration: string; description: string; icon: string; featured?: boolean; }
 interface Testimonial { id: string; name: string; role: string; content: string; rating: number; }
@@ -15,8 +17,9 @@ const iconMap: Record<string, any> = { car: Car, motorcycle: Bike, book: BookOpe
 
 export default function Home() {
   const settings = useSettings();
-  const [formations, setFormations] = useState<Formation[]>([]);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const isMobile = useIsMobile();
+  const [formations, setFormations] = useState<Formation[]>(seedFormations.filter(f => f.featured) as Formation[]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(seedTemoignages as Testimonial[]);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const { scrollY } = useScroll();
@@ -37,8 +40,14 @@ export default function Home() {
   const onHeroLeave = () => { mx.set(0); my.set(0); };
 
   useEffect(() => {
-    fetch(apiUrl('/api/formations')).then(r => r.json()).then((d: Formation[]) => setFormations(d.filter(f => f.featured)));
-    fetch(apiUrl('/api/temoignages')).then(r => r.json()).then(setTestimonials);
+    fetch(apiUrl('/api/formations'))
+      .then(r => r.json())
+      .then((d: Formation[]) => { if (Array.isArray(d) && d.length) setFormations(d.filter(f => f.featured)); })
+      .catch(() => {});
+    fetch(apiUrl('/api/temoignages'))
+      .then(r => r.json())
+      .then((d: Testimonial[]) => { if (Array.isArray(d) && d.length) setTestimonials(d); })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -141,9 +150,15 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Road sign decoration */}
-        <div className="hidden md:block absolute bottom-12 right-10 z-20 pointer-events-none">
-          <SpeedSign speed={30} size={90} />
+        {/* Road sign decorations */}
+        <div className="absolute bottom-20 right-3 md:bottom-12 md:right-10 z-20 pointer-events-none">
+          <SpeedSign speed={30} size={isMobile ? 56 : 90} />
+        </div>
+        <div className="absolute top-24 right-3 md:top-32 md:left-12 md:right-auto z-20 pointer-events-none opacity-80">
+          <StopSign size={isMobile ? 50 : 80} />
+        </div>
+        <div className="hidden sm:block absolute bottom-32 left-8 z-20 pointer-events-none opacity-70">
+          <DirectionSign label="Réussite →" size={120} />
         </div>
 
         {/* Scroll indicator */}
@@ -161,8 +176,11 @@ export default function Home() {
       {/* STATS */}
       <section className="py-20 bg-gradient-to-br from-brand-900 to-brand-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(234,166,48,0.15),transparent_50%)]" />
-        <div className="hidden md:block absolute top-6 right-6 opacity-30 pointer-events-none">
-          <PrioritySign size={120} />
+        <div className="absolute top-4 right-4 md:top-6 md:right-6 opacity-30 pointer-events-none">
+          <PrioritySign size={isMobile ? 60 : 120} />
+        </div>
+        <div className="absolute bottom-4 left-4 md:bottom-10 md:left-10 opacity-25 pointer-events-none">
+          <YieldSign size={isMobile ? 50 : 90} />
         </div>
         <div className="container-custom relative z-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -244,8 +262,11 @@ export default function Home() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-24 bg-white" style={{ perspective: 1000 }}>
-        <div className="container-custom">
+      <section className="py-24 bg-white relative overflow-hidden" style={{ perspective: 1000 }}>
+        <div className="absolute top-8 right-4 md:right-12 opacity-30 pointer-events-none">
+          <WarningSign label="Excellence" size={isMobile ? 56 : 100} />
+        </div>
+        <div className="container-custom relative z-10">
           <SectionHeader
             eyebrow="Pourquoi Nous Choisir"
             title={<>L'excellence au service de votre <span className="text-gradient">réussite</span></>}

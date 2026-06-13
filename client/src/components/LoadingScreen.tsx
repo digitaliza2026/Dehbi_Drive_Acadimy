@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { SpeedSign, WarningSign } from './RoadSign';
+import { SpeedSign, WarningSign, StopSign } from './RoadSign';
 
 const ROAD_DOTS = Array.from({ length: 10 });
 
@@ -29,30 +29,42 @@ export default function LoadingScreen() {
         ))}
       </div>
 
-      {/* Floating road signs — hidden on mobile */}
+      {/* Floating road signs */}
       <motion.div
-        className="hidden md:block absolute bottom-24 left-12 z-10"
+        className="absolute bottom-24 left-4 md:left-12 z-10"
         initial={{ opacity: 0, x: -40, y: 20 }}
         animate={{ opacity: 0.85, x: 0, y: 0 }}
         transition={{ delay: 0, duration: 0.6, ease: 'easeOut' }}
       >
-        <SpeedSign speed={30} size={70} />
+        <SpeedSign speed={30} size={50} className="md:hidden" />
+        <SpeedSign speed={30} size={70} className="hidden md:block" />
       </motion.div>
       <motion.div
-        className="hidden md:block absolute bottom-32 right-16 z-10"
+        className="absolute bottom-32 right-4 md:right-16 z-10"
         initial={{ opacity: 0, x: 40, y: 20 }}
         animate={{ opacity: 0.85, x: 0, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
       >
-        <WarningSign label="GO" size={70} />
+        <WarningSign label="GO" size={50} className="md:hidden" />
+        <WarningSign label="GO" size={70} className="hidden md:block" />
       </motion.div>
       <motion.div
-        className="hidden md:block absolute top-20 right-20 z-10"
+        className="absolute top-16 right-4 md:top-20 md:right-20 z-10"
         initial={{ opacity: 0, x: 40, y: -20 }}
         animate={{ opacity: 0.85, x: 0, y: 0 }}
         transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
       >
-        <SpeedSign speed={50} size={60} />
+        <SpeedSign speed={50} size={44} className="md:hidden" />
+        <SpeedSign speed={50} size={60} className="hidden md:block" />
+      </motion.div>
+      <motion.div
+        className="absolute top-20 left-4 md:left-20 z-10"
+        initial={{ opacity: 0, x: -40, y: -20 }}
+        animate={{ opacity: 0.85, x: 0, y: 0 }}
+        transition={{ delay: 0.9, duration: 0.6, ease: 'easeOut' }}
+      >
+        <StopSign size={44} className="md:hidden" />
+        <StopSign size={60} className="hidden md:block" />
       </motion.div>
 
       {/* 3D Steering wheel with two layers */}

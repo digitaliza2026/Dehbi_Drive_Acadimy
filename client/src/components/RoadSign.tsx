@@ -158,3 +158,60 @@ export function PrioritySign({ className = '', size = 100 }: BaseProps) {
     </motion.svg>
   );
 }
+
+export function StopSign({ className = '', size = 100 }: BaseProps) {
+  const uid = useId().replace(/:/g, '');
+  return (
+    <motion.svg
+      width={size}
+      height={size * 1.1}
+      viewBox="0 0 100 110"
+      className={className}
+      animate={{ y: [0, -6, 0], rotate: [-2, 2, -2] }}
+      transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+    >
+      <SignDefs uid={uid} />
+      <g filter={`url(#shadow-${uid})`}>
+        {/* Octagon */}
+        <polygon
+          points="34,8 66,8 88,30 88,58 66,80 34,80 12,58 12,30"
+          fill="#dc2626"
+          stroke="#ffffff"
+          strokeWidth="4"
+        />
+        <text
+          x="50"
+          y="52"
+          textAnchor="middle"
+          fontFamily="Arial, Helvetica, sans-serif"
+          fontWeight="900"
+          fontSize="20"
+          fill="#ffffff"
+        >
+          STOP
+        </text>
+      </g>
+      <Pole uid={uid} top={80} height={30} />
+    </motion.svg>
+  );
+}
+
+export function YieldSign({ className = '', size = 100 }: BaseProps) {
+  const uid = useId().replace(/:/g, '');
+  return (
+    <motion.svg
+      width={size}
+      height={size * 1.1}
+      viewBox="0 0 100 110"
+      className={className}
+      {...floatAnim}
+    >
+      <SignDefs uid={uid} />
+      <g filter={`url(#shadow-${uid})`}>
+        {/* Inverted triangle */}
+        <polygon points="8,12 92,12 50,78" fill="#ffffff" stroke="#dc2626" strokeWidth="7" strokeLinejoin="round" />
+      </g>
+      <Pole uid={uid} top={78} height={30} />
+    </motion.svg>
+  );
+}

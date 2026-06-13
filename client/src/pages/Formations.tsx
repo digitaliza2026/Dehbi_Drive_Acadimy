@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Car, Bike, BookOpen, Wrench, Shield, Award, Clock, Tag, Check } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
-import { WarningSign } from '../components/RoadSign';
+import { WarningSign, SpeedSign, YieldSign } from '../components/RoadSign';
 import { Link } from 'react-router-dom';
 import { apiUrl } from '../lib/apiBase';
+import { seedFormations } from '../lib/seedData';
+import { useIsMobile } from '../lib/useIsMobile';
 
 interface Formation { id: string; title: string; category: string; price: string; duration: string; description: string; icon: string; }
 
@@ -19,7 +21,8 @@ const categories = [
 ];
 
 export default function Formations() {
-  const [formations, setFormations] = useState<Formation[]>([]);
+  const isMobile = useIsMobile();
+  const [formations, setFormations] = useState<Formation[]>(seedFormations as Formation[]);
   const [filter, setFilter] = useState('all');
 
   const heroRef = useRef<HTMLElement | null>(null);
@@ -35,7 +38,10 @@ export default function Formations() {
   const onLeave = () => { mx.set(0); my.set(0); };
 
   useEffect(() => {
-    fetch(apiUrl('/api/formations')).then(r => r.json()).then(setFormations);
+    fetch(apiUrl('/api/formations'))
+      .then(r => r.json())
+      .then((d: Formation[]) => { if (Array.isArray(d) && d.length) setFormations(d); })
+      .catch(() => {});
   }, []);
 
   const filtered = filter === 'all' ? formations : formations.filter(f => f.category === filter);
@@ -51,8 +57,11 @@ export default function Formations() {
         style={{ perspective: 1200 }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(234,166,48,0.2),transparent_70%)]" />
-        <div className="hidden md:block absolute top-28 left-10 opacity-40 pointer-events-none">
-          <WarningSign label="Choisir" size={90} />
+        <div className="absolute top-24 left-3 md:top-28 md:left-10 opacity-50 pointer-events-none">
+          <WarningSign label="Choisir" size={isMobile ? 56 : 90} />
+        </div>
+        <div className="absolute top-28 right-3 md:top-32 md:right-10 opacity-50 pointer-events-none">
+          <SpeedSign speed={50} size={isMobile ? 48 : 80} />
         </div>
         <motion.div
           style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
@@ -107,8 +116,11 @@ export default function Formations() {
       </section>
 
       {/* Cards */}
-      <section className="py-20" style={{ perspective: 1000 }}>
-        <div className="container-custom">
+      <section className="py-20 relative overflow-hidden" style={{ perspective: 1000 }}>
+        <div className="absolute top-12 right-4 md:right-12 opacity-25 pointer-events-none">
+          <YieldSign size={isMobile ? 48 : 90} />
+        </div>
+        <div className="container-custom relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((f, i) => {
               const Icon = iconMap[f.icon] || Car;

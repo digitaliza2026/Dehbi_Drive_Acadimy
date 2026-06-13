@@ -2,8 +2,9 @@ import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Award, BookOpen, Shield, Heart, Target, Users } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
-import { SpeedSign } from '../components/RoadSign';
+import { SpeedSign, StopSign, PrioritySign } from '../components/RoadSign';
 import { useSettings } from '../context/SettingsContext';
+import { useIsMobile } from '../lib/useIsMobile';
 
 const timeline = [
   { year: '1994', title: 'Formation à Casablanca', desc: "Intégration de l'Institut Supérieur Industriel de Casablanca — première promotion au Maroc pour la formation spécialisée des moniteurs de conduite. Condition d'accès : diplôme de Technicien Spécialisé en Mécanique Automobile." },
@@ -27,6 +28,7 @@ const values = [
 
 export default function About() {
   const settings = useSettings();
+  const isMobile = useIsMobile();
 
   const heroRef = useRef<HTMLElement | null>(null);
   const mx = useMotionValue(0);
@@ -51,9 +53,12 @@ export default function About() {
         style={{ perspective: 1200 }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(234,166,48,0.2),transparent_70%)]" />
+        <div className="absolute top-24 right-3 md:top-28 md:right-10 opacity-60 pointer-events-none z-10">
+          <PrioritySign size={isMobile ? 60 : 110} />
+        </div>
         <motion.div
           style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
-          className="container-custom relative z-10 text-center"
+          className="container-custom relative z-20 text-center"
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -201,8 +206,13 @@ export default function About() {
                 >
                   <div className={`md:w-5/12 ${isLeft ? 'md:pr-8 md:text-right' : 'md:pl-8'} relative`}>
                     {item.year === '1994' && (
-                      <div className="hidden md:block absolute -top-4 -right-12 opacity-70 pointer-events-none">
-                        <SpeedSign speed={94} size={56} />
+                      <div className="absolute -top-2 right-2 md:-top-4 md:-right-12 opacity-80 pointer-events-none">
+                        <SpeedSign speed={94} size={isMobile ? 42 : 56} />
+                      </div>
+                    )}
+                    {item.year === '2024' && (
+                      <div className="absolute -top-2 right-2 md:-top-4 md:-right-12 opacity-70 pointer-events-none">
+                        <StopSign size={isMobile ? 42 : 56} />
                       </div>
                     )}
                     <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold-400/50 transition-colors">

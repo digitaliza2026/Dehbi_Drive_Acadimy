@@ -2,15 +2,22 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn } from 'lucide-react';
 import { apiUrl, assetUrl } from '../lib/apiBase';
+import { seedGalerie } from '../lib/seedData';
+import { WarningSign, SpeedSign } from '../components/RoadSign';
+import { useIsMobile } from '../lib/useIsMobile';
 
 interface Photo { id: string; url: string; title: string; category: string; }
 
 export default function Galerie() {
-  const [photos, setPhotos] = useState<Photo[]>([]);
+  const isMobile = useIsMobile();
+  const [photos, setPhotos] = useState<Photo[]>(seedGalerie as Photo[]);
   const [selected, setSelected] = useState<Photo | null>(null);
 
   useEffect(() => {
-    fetch(apiUrl('/api/galerie')).then(r => r.json()).then(setPhotos);
+    fetch(apiUrl('/api/galerie'))
+      .then(r => r.json())
+      .then((d: Photo[]) => { if (Array.isArray(d) && d.length) setPhotos(d); })
+      .catch(() => {});
   }, []);
 
   return (
@@ -18,7 +25,13 @@ export default function Galerie() {
       {/* Header */}
       <section className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_50%,rgba(234,166,48,0.2),transparent_70%)]" />
-        <div className="container-custom relative z-10 text-center">
+        <div className="absolute top-24 right-3 md:top-28 md:right-10 opacity-60 pointer-events-none z-10">
+          <WarningSign label="Photos" size={isMobile ? 56 : 100} />
+        </div>
+        <div className="absolute top-28 left-3 md:top-32 md:left-10 opacity-50 pointer-events-none z-10">
+          <SpeedSign speed={30} size={isMobile ? 48 : 80} />
+        </div>
+        <div className="container-custom relative z-20 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

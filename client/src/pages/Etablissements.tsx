@@ -3,11 +3,15 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { MapPin, Calendar, Star, ArrowRight } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import { apiUrl } from '../lib/apiBase';
+import { seedEtablissements } from '../lib/seedData';
+import { DirectionSign, PrioritySign } from '../components/RoadSign';
+import { useIsMobile } from '../lib/useIsMobile';
 
 interface Etab { id: string; name: string; city: string; province: string; year: number; description: string; featured?: boolean; }
 
 export default function Etablissements() {
-  const [items, setItems] = useState<Etab[]>([]);
+  const isMobile = useIsMobile();
+  const [items, setItems] = useState<Etab[]>(() => [...seedEtablissements].sort((a, b) => a.year - b.year) as Etab[]);
 
   const heroRef = useRef<HTMLElement | null>(null);
   const mx = useMotionValue(0);
@@ -24,7 +28,8 @@ export default function Etablissements() {
   useEffect(() => {
     fetch(apiUrl('/api/etablissements'))
       .then(r => r.json())
-      .then((data: Etab[]) => setItems(data.sort((a, b) => a.year - b.year)));
+      .then((data: Etab[]) => { if (Array.isArray(data) && data.length) setItems(data.sort((a, b) => a.year - b.year)); })
+      .catch(() => {});
   }, []);
 
   return (
@@ -38,9 +43,15 @@ export default function Etablissements() {
         style={{ perspective: 1200 }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(234,166,48,0.2),transparent_70%)]" />
+        <div className="absolute top-24 right-3 md:top-28 md:right-10 opacity-70 pointer-events-none z-10">
+          <DirectionSign label="7 Centres" size={isMobile ? 90 : 140} />
+        </div>
+        <div className="absolute top-24 left-3 md:top-28 md:left-10 opacity-40 pointer-events-none z-10">
+          <PrioritySign size={isMobile ? 56 : 100} />
+        </div>
         <motion.div
           style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
-          className="container-custom relative z-10 text-center"
+          className="container-custom relative z-20 text-center"
         >
           <motion.span
             initial={{ opacity: 0 }}

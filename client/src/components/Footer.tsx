@@ -74,7 +74,7 @@ export default function Footer() {
             transition={{ delay: 0.2 }}
             className="relative"
           >
-            <div className="hidden md:block absolute -top-2 right-0 opacity-50 pointer-events-none">
+            <div className="absolute -top-2 right-0 opacity-50 pointer-events-none">
               <DirectionSign label="Fès, Maroc" size={60} />
             </div>
             <h4 className="text-white font-semibold mb-4 text-lg">Contact</h4>

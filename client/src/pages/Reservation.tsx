@@ -2,8 +2,9 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Calendar, Clock, User, Phone, Mail, BookOpen, CheckCircle2, AlertCircle } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
-import { DirectionSign } from '../components/RoadSign';
+import { DirectionSign, SpeedSign } from '../components/RoadSign';
 import { apiUrl } from '../lib/apiBase';
+import { useIsMobile } from '../lib/useIsMobile';
 
 interface Formation { id: string; title: string; }
 interface Creneau { id: string; day: string; time: string; available: boolean; }
@@ -312,6 +313,7 @@ export default function Reservation() {
 }
 
 function ReservationHero() {
+  const isMobile = useIsMobile();
   const heroRef = useRef<HTMLElement | null>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -332,8 +334,11 @@ function ReservationHero() {
       style={{ perspective: 1200 }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(234,166,48,0.2),transparent_70%)]" />
-      <div className="hidden md:block absolute top-28 right-10 pointer-events-none">
-        <DirectionSign label="Réservation →" size={140} />
+      <div className="absolute top-24 right-3 md:top-28 md:right-10 pointer-events-none z-10">
+        <DirectionSign label="Réservation →" size={isMobile ? 90 : 140} />
+      </div>
+      <div className="absolute top-28 left-3 md:top-32 md:left-10 pointer-events-none z-10 opacity-70">
+        <SpeedSign speed={70} size={isMobile ? 50 : 80} />
       </div>
       <motion.div
         style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
