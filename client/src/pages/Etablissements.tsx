@@ -1,12 +1,24 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Calendar, Star } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { MapPin, Calendar, Star, ArrowRight } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 
 interface Etab { id: string; name: string; city: string; province: string; year: number; description: string; featured?: boolean; }
 
 export default function Etablissements() {
   const [items, setItems] = useState<Etab[]>([]);
+
+  const heroRef = useRef<HTMLElement | null>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotY = useSpring(useTransform(mx, [-1, 1], [-5, 5]), { stiffness: 120, damping: 18 });
+  const rotX = useSpring(useTransform(my, [-1, 1], [5, -5]), { stiffness: 120, damping: 18 });
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onLeave = () => { mx.set(0); my.set(0); };
 
   useEffect(() => {
     fetch('/api/etablissements')
@@ -17,9 +29,18 @@ export default function Etablissements() {
   return (
     <div>
       {/* Header */}
-      <section className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden">
+      <section
+        ref={heroRef}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden"
+        style={{ perspective: 1200 }}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(234,166,48,0.2),transparent_70%)]" />
-        <div className="container-custom relative z-10 text-center">
+        <motion.div
+          style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
+          className="container-custom relative z-10 text-center"
+        >
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -43,7 +64,7 @@ export default function Etablissements() {
           >
             7 centres répartis à travers le Maroc — présents partout grâce à nos collaborations avec de nombreuses auto-écoles
           </motion.p>
-        </div>
+        </motion.div>
       </section>
 
       {/* Map-style network */}
@@ -55,7 +76,7 @@ export default function Etablissements() {
             subtitle="De Casablanca en 1996 à Fès aujourd'hui, suivez notre parcours"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ perspective: 1200 }}>
             {items.map((etab, i) => (
               <motion.div
                 key={etab.id}
@@ -63,30 +84,59 @@ export default function Etablissements() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ delay: (i % 6) * 0.1, duration: 0.5 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className={`card-base p-7 relative ${etab.featured ? 'ring-2 ring-gold-400 shadow-2xl' : ''}`}
+                className="relative h-72 group"
+                style={{ perspective: 1200 }}
               >
-                {etab.featured && (
-                  <div className="absolute -top-3 right-6">
-                    <span className="inline-flex items-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-brand-900 text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      <Star size={12} className="fill-brand-900" /> Phare
-                    </span>
+                <div
+                  className="relative w-full h-full transition-transform duration-700 group-hover:[transform:rotateY(180deg)]"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  {/* Front face */}
+                  <div
+                    className={`card-base p-7 absolute inset-0 flex flex-col justify-center ${etab.featured ? 'ring-2 ring-gold-400 shadow-2xl' : ''}`}
+                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                  >
+                    {etab.featured && (
+                      <div className="absolute -top-3 right-6">
+                        <span className="inline-flex items-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-brand-900 text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                          <Star size={12} className="fill-brand-900" /> Phare
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 flex items-center justify-center flex-shrink-0">
+                        <MapPin size={22} className="text-gold-400" />
+                      </div>
+                      <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gold-50 text-gold-700 text-xs font-bold">
+                        <Calendar size={12} /> {etab.year}
+                      </div>
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-brand-900 mb-2">{etab.name}</h3>
+                    <div className="text-brand-700 font-semibold mb-1">{etab.city}</div>
+                    <div className="text-brand-500 text-sm">{etab.province}</div>
                   </div>
-                )}
 
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 flex items-center justify-center flex-shrink-0">
-                    <MapPin size={22} className="text-gold-400" />
-                  </div>
-                  <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gold-50 text-gold-700 text-xs font-bold">
-                    <Calendar size={12} /> {etab.year}
+                  {/* Back face */}
+                  <div
+                    className="card-base p-7 absolute inset-0 flex flex-col justify-between bg-gradient-to-br from-brand-800 to-brand-950 text-white"
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg)'
+                    }}
+                  >
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-gold-300 mb-3">{etab.name}</h3>
+                      <p className="text-brand-100 text-sm leading-relaxed">{etab.description}</p>
+                    </div>
+                    <a
+                      href="#timeline"
+                      className="inline-flex items-center gap-1 mt-4 text-gold-300 hover:text-gold-200 text-sm font-semibold"
+                    >
+                      En savoir plus <ArrowRight size={14} />
+                    </a>
                   </div>
                 </div>
-
-                <h3 className="font-display text-xl font-bold text-brand-900 mb-2">{etab.name}</h3>
-                <div className="text-brand-700 font-semibold mb-1">{etab.city}</div>
-                <div className="text-brand-500 text-sm mb-4">{etab.province}</div>
-                <p className="text-brand-600 text-sm leading-relaxed">{etab.description}</p>
               </motion.div>
             ))}
           </div>
@@ -94,7 +144,7 @@ export default function Etablissements() {
       </section>
 
       {/* Timeline visualization */}
-      <section className="py-20 bg-gradient-to-br from-brand-900 to-brand-950 text-white">
+      <section id="timeline" className="py-20 bg-gradient-to-br from-brand-900 to-brand-950 text-white">
         <div className="container-custom">
           <SectionHeader
             eyebrow="Chronologie"

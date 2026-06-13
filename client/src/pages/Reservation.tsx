@@ -1,7 +1,8 @@
-import { useEffect, useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Calendar, Clock, User, Phone, Mail, BookOpen, CheckCircle2, AlertCircle } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { DirectionSign } from '../components/RoadSign';
 
 interface Formation { id: string; title: string; }
 interface Creneau { id: string; day: string; time: string; available: boolean; }
@@ -101,26 +102,7 @@ export default function Reservation() {
   return (
     <div>
       {/* Header */}
-      <section className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(234,166,48,0.2),transparent_70%)]" />
-        <div className="container-custom relative z-10 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-display text-4xl md:text-6xl font-bold mb-4"
-          >
-            <span className="text-gradient">Réservez</span> votre leçon
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-brand-200 max-w-2xl mx-auto text-lg"
-          >
-            Choisissez votre créneau et commencez votre formation dès aujourd'hui
-          </motion.p>
-        </div>
-      </section>
+      <ReservationHero />
 
       <section className="py-20">
         <div className="container-custom max-w-5xl">
@@ -325,5 +307,53 @@ export default function Reservation() {
         </div>
       </section>
     </div>
+  );
+}
+
+function ReservationHero() {
+  const heroRef = useRef<HTMLElement | null>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotY = useSpring(useTransform(mx, [-1, 1], [-5, 5]), { stiffness: 120, damping: 18 });
+  const rotX = useSpring(useTransform(my, [-1, 1], [5, -5]), { stiffness: 120, damping: 18 });
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onLeave = () => { mx.set(0); my.set(0); };
+  return (
+    <section
+      ref={heroRef}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden"
+      style={{ perspective: 1200 }}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(234,166,48,0.2),transparent_70%)]" />
+      <div className="hidden md:block absolute top-28 right-10 pointer-events-none">
+        <DirectionSign label="Réservation →" size={140} />
+      </div>
+      <motion.div
+        style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
+        className="container-custom relative z-10 text-center"
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="font-display text-4xl md:text-6xl font-bold mb-4"
+        >
+          <span className="text-gradient">Réservez</span> votre leçon
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-brand-200 max-w-2xl mx-auto text-lg"
+        >
+          Choisissez votre créneau et commencez votre formation dès aujourd'hui
+        </motion.p>
+      </motion.div>
+    </section>
   );
 }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Instagram, Facebook, ChevronRight } from 'lucide-react';
+import { DirectionSign } from './RoadSign';
 import { useSettings } from '../context/SettingsContext';
 
 export default function Footer() {
@@ -71,7 +72,11 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
+            className="relative"
           >
+            <div className="hidden md:block absolute -top-2 right-0 opacity-50 pointer-events-none">
+              <DirectionSign label="Fès, Maroc" size={60} />
+            </div>
             <h4 className="text-white font-semibold mb-4 text-lg">Contact</h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">

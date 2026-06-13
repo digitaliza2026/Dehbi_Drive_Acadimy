@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Award, BookOpen, Shield, Heart, Target, Users } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { SpeedSign } from '../components/RoadSign';
 import { useSettings } from '../context/SettingsContext';
 
 const timeline = [
@@ -26,12 +28,33 @@ const values = [
 export default function About() {
   const settings = useSettings();
 
+  const heroRef = useRef<HTMLElement | null>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotY = useSpring(useTransform(mx, [-1, 1], [-5, 5]), { stiffness: 120, damping: 18 });
+  const rotX = useSpring(useTransform(my, [-1, 1], [5, -5]), { stiffness: 120, damping: 18 });
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onLeave = () => { mx.set(0); my.set(0); };
+
   return (
     <div>
       {/* Header */}
-      <section className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden">
+      <section
+        ref={heroRef}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden"
+        style={{ perspective: 1200 }}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(234,166,48,0.2),transparent_70%)]" />
-        <div className="container-custom relative z-10 text-center">
+        <motion.div
+          style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
+          className="container-custom relative z-10 text-center"
+        >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -47,7 +70,7 @@ export default function About() {
           >
             Un parcours de 30 années dédié à l'excellence dans l'enseignement de la conduite au Maroc
           </motion.p>
-        </div>
+        </motion.div>
       </section>
 
       {/* Founder story */}
@@ -94,14 +117,24 @@ export default function About() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-gradient-to-br from-gold-500 to-gold-600 rounded-2xl p-6 text-brand-900 shadow-2xl">
+              <motion.div
+                className="absolute -bottom-6 -right-6 bg-gradient-to-br from-gold-500 to-gold-600 rounded-2xl p-6 text-brand-900 shadow-2xl"
+                style={{ transformStyle: 'preserve-3d' }}
+                animate={{ y: [0, -8, 0], rotateX: [0, 5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              >
                 <div className="font-display text-4xl font-bold">30+</div>
                 <div className="text-sm uppercase tracking-wider">Années</div>
-              </div>
-              <div className="absolute -top-6 -left-6 bg-white rounded-2xl p-6 shadow-2xl">
+              </motion.div>
+              <motion.div
+                className="absolute -top-6 -left-6 bg-white rounded-2xl p-6 shadow-2xl"
+                style={{ transformStyle: 'preserve-3d' }}
+                animate={{ y: [0, -8, 0], rotateX: [0, 5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+              >
                 <div className="font-display text-4xl font-bold text-brand-900">10K+</div>
                 <div className="text-sm uppercase tracking-wider text-brand-600">Diplômés</div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -166,7 +199,12 @@ export default function About() {
                   transition={{ duration: 0.6 }}
                   className={`relative pl-12 md:pl-0 mb-10 md:flex ${isLeft ? 'md:justify-start' : 'md:justify-end'}`}
                 >
-                  <div className={`md:w-5/12 ${isLeft ? 'md:pr-8 md:text-right' : 'md:pl-8'}`}>
+                  <div className={`md:w-5/12 ${isLeft ? 'md:pr-8 md:text-right' : 'md:pl-8'} relative`}>
+                    {item.year === '1994' && (
+                      <div className="hidden md:block absolute -top-4 -right-12 opacity-70 pointer-events-none">
+                        <SpeedSign speed={94} size={56} />
+                      </div>
+                    )}
                     <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-gold-400/50 transition-colors">
                       <div className="font-display text-3xl text-gradient font-bold mb-2">{item.year}</div>
                       <h3 className="font-semibold text-lg mb-2">{item.title}</h3>

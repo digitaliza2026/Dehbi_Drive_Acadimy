@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Car, Bike, BookOpen, Wrench, Shield, Award, Clock, Tag, Check } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { WarningSign } from '../components/RoadSign';
 import { Link } from 'react-router-dom';
 
 interface Formation { id: string; title: string; category: string; price: string; duration: string; description: string; icon: string; }
@@ -20,6 +21,18 @@ export default function Formations() {
   const [formations, setFormations] = useState<Formation[]>([]);
   const [filter, setFilter] = useState('all');
 
+  const heroRef = useRef<HTMLElement | null>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotY = useSpring(useTransform(mx, [-1, 1], [-5, 5]), { stiffness: 120, damping: 18 });
+  const rotX = useSpring(useTransform(my, [-1, 1], [5, -5]), { stiffness: 120, damping: 18 });
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onLeave = () => { mx.set(0); my.set(0); };
+
   useEffect(() => {
     fetch('/api/formations').then(r => r.json()).then(setFormations);
   }, []);
@@ -29,9 +42,21 @@ export default function Formations() {
   return (
     <div>
       {/* Page header */}
-      <section className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden">
+      <section
+        ref={heroRef}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        className="relative pt-32 pb-16 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 text-white overflow-hidden"
+        style={{ perspective: 1200 }}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(234,166,48,0.2),transparent_70%)]" />
-        <div className="container-custom relative z-10 text-center">
+        <div className="hidden md:block absolute top-28 left-10 opacity-40 pointer-events-none">
+          <WarningSign label="Choisir" size={90} />
+        </div>
+        <motion.div
+          style={{ rotateY: rotY, rotateX: rotX, transformStyle: 'preserve-3d' }}
+          className="container-custom relative z-10 text-center"
+        >
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -55,7 +80,7 @@ export default function Formations() {
           >
             Des formations sur mesure adaptées à votre rythme et à vos objectifs
           </motion.p>
-        </div>
+        </motion.div>
       </section>
 
       {/* Filter */}
@@ -81,7 +106,7 @@ export default function Formations() {
       </section>
 
       {/* Cards */}
-      <section className="py-20">
+      <section className="py-20" style={{ perspective: 1000 }}>
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((f, i) => {
@@ -94,9 +119,17 @@ export default function Formations() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ delay: (i % 6) * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -10 }}
-                  className="card-base p-8 relative overflow-hidden group"
+                  whileHover={{ rotateY: 8, rotateX: -4, scale: 1.04, z: 40, y: -10 }}
+                  style={{ transformStyle: 'preserve-3d' }}
+                  className="card-base p-8 relative overflow-hidden group hover:shadow-[8px_16px_40px_rgba(30,49,99,0.2)]"
                 >
+                  {/* Shine sweep */}
+                  <motion.div
+                    initial={{ x: '-100%', opacity: 0 }}
+                    whileHover={{ x: '100%', opacity: 0.15 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none"
+                  />
                   {/* Decorative gradient */}
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-gold-100 to-transparent rounded-full -translate-y-20 translate-x-20 opacity-50 group-hover:scale-150 transition-transform duration-700" />
 

@@ -70,7 +70,7 @@ export default function AdminSettings() {
       setTimeout(() => {
         logout();
         navigate('/admin/login');
-      }, 1500);
+      }, 2000);
     } catch {
       setPwError('Erreur réseau');
     } finally {
@@ -203,7 +203,7 @@ export default function AdminSettings() {
 
         {pwSuccess && (
           <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl p-3 text-sm">
-            ✓ Mot de passe modifié. Redirection vers la page de connexion…
+            ✓ Mot de passe modifié — veuillez vous reconnecter
           </div>
         )}
 

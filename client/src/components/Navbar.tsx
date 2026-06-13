@@ -37,10 +37,11 @@ export default function Navbar() {
       }`}
     >
       <div className="container-custom flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" className="flex items-center gap-3 group" style={{ perspective: 600 }}>
           <motion.div
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 0.8 }}
+            whileHover={{ rotateY: 360, rotateX: 15 }}
+            transition={{ duration: 0.8, type: 'spring' }}
+            style={{ transformStyle: 'preserve-3d' }}
             className="relative"
           >
             <svg width="40" height="40" viewBox="0 0 64 64">

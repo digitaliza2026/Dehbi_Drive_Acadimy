@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
 import { Car, Bike, BookOpen, Wrench, Shield, Award, Users, MapPin, ChevronRight, Star, Quote, ArrowRight } from 'lucide-react';
 import AnimatedCounter from '../components/AnimatedCounter';
 import SectionHeader from '../components/SectionHeader';
+import { SpeedSign, PrioritySign } from '../components/RoadSign';
 import { useSettings } from '../context/SettingsContext';
 
 interface Formation { id: string; title: string; category: string; price: string; duration: string; description: string; icon: string; featured?: boolean; }
@@ -21,6 +22,19 @@ export default function Home() {
   const heroY = useTransform(scrollY, [0, 800], [0, 250]);
   const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
 
+  // Hero parallax mouse tilt
+  const heroRef = useRef<HTMLElement | null>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const heroRotY = useSpring(useTransform(mx, [-1, 1], [-5, 5]), { stiffness: 120, damping: 18 });
+  const heroRotX = useSpring(useTransform(my, [-1, 1], [5, -5]), { stiffness: 120, damping: 18 });
+  const onHeroMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onHeroLeave = () => { mx.set(0); my.set(0); };
+
   useEffect(() => {
     fetch('/api/formations').then(r => r.json()).then((d: Formation[]) => setFormations(d.filter(f => f.featured)));
     fetch('/api/temoignages').then(r => r.json()).then(setTestimonials);
@@ -35,7 +49,13 @@ export default function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section
+        ref={heroRef}
+        onMouseMove={onHeroMove}
+        onMouseLeave={onHeroLeave}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        style={{ perspective: 1200 }}
+      >
         {/* Parallax background */}
         <motion.div
           style={{ y: heroY }}
@@ -71,7 +91,10 @@ export default function Home() {
           ))}
         </div>
 
-        <motion.div style={{ opacity: heroOpacity }} className="container-custom relative z-20 text-center text-white py-32">
+        <motion.div
+          style={{ opacity: heroOpacity, rotateY: heroRotY, rotateX: heroRotX, transformStyle: 'preserve-3d' }}
+          className="container-custom relative z-20 text-center text-white py-32"
+        >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -117,6 +140,11 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
+        {/* Road sign decoration */}
+        <div className="hidden md:block absolute bottom-12 right-10 z-20 pointer-events-none">
+          <SpeedSign speed={30} size={90} />
+        </div>
+
         {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
@@ -132,6 +160,9 @@ export default function Home() {
       {/* STATS */}
       <section className="py-20 bg-gradient-to-br from-brand-900 to-brand-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(234,166,48,0.15),transparent_50%)]" />
+        <div className="hidden md:block absolute top-6 right-6 opacity-30 pointer-events-none">
+          <PrioritySign size={120} />
+        </div>
         <div className="container-custom relative z-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {[
@@ -162,7 +193,7 @@ export default function Home() {
       </section>
 
       {/* FORMATIONS */}
-      <section className="py-24 bg-brand-50/50">
+      <section className="py-24 bg-brand-50/50" style={{ perspective: 1000 }}>
         <div className="container-custom">
           <SectionHeader
             eyebrow="Nos Formations"
@@ -180,8 +211,9 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ delay: i * 0.1, duration: 0.6 }}
-                  whileHover={{ y: -10 }}
-                  className="card-base p-8 group cursor-pointer"
+                  whileHover={{ rotateY: 8, rotateX: -4, scale: 1.04, z: 40, y: -10 }}
+                  style={{ transformStyle: 'preserve-3d' }}
+                  className="card-base p-8 group cursor-pointer hover:shadow-[8px_16px_40px_rgba(30,49,99,0.2)]"
                 >
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                     <Icon size={26} className="text-gold-400" />
@@ -211,7 +243,7 @@ export default function Home() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white" style={{ perspective: 1000 }}>
         <div className="container-custom">
           <SectionHeader
             eyebrow="Pourquoi Nous Choisir"
@@ -232,8 +264,9 @@ export default function Home() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                whileHover={{ y: -8 }}
-                className="text-center p-6 rounded-2xl hover:bg-brand-50/50 transition-colors"
+                whileHover={{ rotateY: 8, rotateX: -4, scale: 1.04, z: 40, y: -8 }}
+                style={{ transformStyle: 'preserve-3d' }}
+                className="text-center p-6 rounded-2xl hover:bg-brand-50/50 transition-colors hover:shadow-[8px_16px_40px_rgba(30,49,99,0.2)]"
               >
                 <motion.div
                   whileHover={{ rotate: 360 }}

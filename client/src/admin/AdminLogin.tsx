@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Lock, User, AlertCircle } from 'lucide-react';
+import { Lock, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -75,14 +76,24 @@ export default function AdminLogin() {
             <label className="block text-sm font-medium text-brand-100 mb-2">
               <Lock size={14} className="inline mr-1" /> Mot de passe
             </label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-brand-300 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/30 focus:outline-none"
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="w-full px-4 py-3 pr-12 rounded-xl bg-white/10 border border-white/20 text-white placeholder-brand-300 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/30 focus:outline-none"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(s => !s)}
+                aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-300 hover:text-white cursor-pointer"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           {error && (
@@ -102,10 +113,6 @@ export default function AdminLogin() {
           >
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
-
-          <div className="mt-6 text-center text-xs text-brand-300">
-            Identifiants par défaut : <code className="bg-white/10 px-2 py-1 rounded">admin / admin123</code>
-          </div>
         </form>
       </motion.div>
     </div>
