@@ -1,0 +1,31 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Block direct access to source / metadata folders
+  RewriteRule ^\.git(/|$) - [F,L]
+  RewriteRule ^\.builds(/|$) - [F,L]
+  RewriteRule ^\.claude(/|$) - [F,L]
+  RewriteRule ^server(/|$) - [F,L]
+  RewriteRule ^node_modules(/|$) - [F,L]
+  RewriteRule ^client/(?!dist/) - [F,L]
+  RewriteRule ^(package(-lock)?\.json|README\.md|pw-.*\.js)$ - [F,L]
+
+  # If the requested path doesn't already point inside client/dist
+  # and a matching file exists there, serve it from client/dist
+  RewriteCond %{REQUEST_URI} !^/client/dist/
+  RewriteCond %{DOCUMENT_ROOT}/client/dist%{REQUEST_URI} -f
+  RewriteRule ^(.*)$ client/dist/$1 [L]
+
+  # SPA fallback: any unknown path serves the React app
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . client/dist/index.html [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType application/javascript .js
+  AddType text/css .css
+</IfModule>
+
+DirectoryIndex client/dist/index.html
