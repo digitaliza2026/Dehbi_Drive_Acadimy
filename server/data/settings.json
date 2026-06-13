@@ -1,0 +1,20 @@
+[
+  {
+    "schoolName": "Dehbi Drive Academy",
+    "tagline": "30 ans d'excellence dans l'enseignement de la conduite",
+    "address": "1er étage, Espace Rihab Fès, Imm C, Av Allal Ben Abdellah, VN Fès, Maroc",
+    "phone": "0663 722 722",
+    "phoneFixed": "0532 138 710",
+    "email": "Dehbi.drive@gmail.com",
+    "instagram": "https://instagram.com/dehbi_drive_academy",
+    "facebook": "https://facebook.com/Dehbi Drive academy",
+    "instagramHandle": "@dehbi_drive_academy",
+    "facebookHandle": "Dehbi Drive academy",
+    "stats": {
+      "years": 30,
+      "candidates": 10000,
+      "branches": 7,
+      "since": 1994
+    }
+  }
+]

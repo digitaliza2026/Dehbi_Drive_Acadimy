@@ -1,0 +1,62 @@
+[
+  {
+    "id": "f1",
+    "title": "Permis B - Voiture",
+    "category": "voiture",
+    "price": "3000 DH",
+    "duration": "20-30 heures",
+    "description": "Formation complète théorique et pratique pour l'obtention du permis B. Cours personnalisés adaptés à votre rythme.",
+    "icon": "car",
+    "featured": true
+  },
+  {
+    "id": "f2",
+    "title": "Permis A - Moto",
+    "category": "moto",
+    "price": "2500 DH",
+    "duration": "15-25 heures",
+    "description": "Formation pour permis moto avec instructeurs spécialisés. Sécurité et maîtrise au cœur de l'apprentissage.",
+    "icon": "motorcycle",
+    "featured": true
+  },
+  {
+    "id": "f3",
+    "title": "Code de la Route",
+    "category": "code",
+    "price": "800 DH",
+    "duration": "Accès illimité",
+    "description": "Maîtrise du code de la route avec supports numériques modernes : vidéos, applications et simulations interactives.",
+    "icon": "book",
+    "featured": true
+  },
+  {
+    "id": "f4",
+    "title": "Mécanique Automobile",
+    "category": "mecanique",
+    "price": "1500 DH",
+    "duration": "10-15 heures",
+    "description": "Formation aux notions essentielles de mécanique automobile dispensée par un Technicien Spécialisé.",
+    "icon": "wrench",
+    "featured": false
+  },
+  {
+    "id": "f5",
+    "title": "Formation Accélérée",
+    "category": "voiture",
+    "price": "4500 DH",
+    "duration": "2 semaines",
+    "description": "Formation intensive pour obtenir votre permis rapidement. Programme condensé et personnalisé.",
+    "icon": "lightning",
+    "featured": false
+  },
+  {
+    "id": "f6",
+    "title": "Sécurité Routière",
+    "category": "code",
+    "price": "600 DH",
+    "duration": "5 heures",
+    "description": "Module spécialisé sur les règles de sécurité routière et la réglementation marocaine actualisée.",
+    "icon": "shield",
+    "featured": false
+  }
+]

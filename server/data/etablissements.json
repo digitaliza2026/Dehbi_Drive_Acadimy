@@ -1,0 +1,61 @@
+[
+  {
+    "id": "e1",
+    "name": "Première Auto-école Dehbi",
+    "city": "Casablanca",
+    "province": "Origine",
+    "year": 1996,
+    "description": "Création de la première auto-école, avec une pédagogie axée sur la rigueur, la patience et le professionnalisme.",
+    "featured": true
+  },
+  {
+    "id": "e2",
+    "name": "Auto-école Maroc Conduite",
+    "city": "Karia Ba Mohammed",
+    "province": "Province de Taounate",
+    "year": 2014,
+    "description": "Extension de l'activité à la région de Taounate avec une nouvelle équipe d'instructeurs qualifiés."
+  },
+  {
+    "id": "e3",
+    "name": "Auto-école Mehdi Dehbi",
+    "city": "Bouchabel",
+    "province": "Province de Taounate",
+    "year": 2020,
+    "description": "Ouverture d'un nouveau centre pour répondre à la demande croissante dans la région."
+  },
+  {
+    "id": "e4",
+    "name": "Auto-école Dehbi",
+    "city": "Oulja",
+    "province": "Province de Taounate",
+    "year": 2021,
+    "description": "Renforcement de notre présence dans la province de Taounate avec un centre moderne."
+  },
+  {
+    "id": "e5",
+    "name": "Auto-école Code Dehbi",
+    "city": "Hamria",
+    "province": "Province de Moulay Yaacoub",
+    "year": 2022,
+    "description": "Centre spécialisé dans l'enseignement du code de la route avec supports numériques."
+  },
+  {
+    "id": "e6",
+    "name": "Dehbi Drive Academy 1",
+    "city": "Centre-ville de Fès",
+    "province": "Fès",
+    "year": 2024,
+    "description": "Centre principal au cœur de Fès, équipé des dernières technologies pédagogiques.",
+    "featured": true
+  },
+  {
+    "id": "e7",
+    "name": "Dehbi Drive Academy 2",
+    "city": "Ras El Mae",
+    "province": "Fès",
+    "year": 2025,
+    "description": "Notre tout dernier centre, offrant des installations modernes et un service d'excellence.",
+    "featured": true
+  }
+]

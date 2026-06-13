@@ -1,0 +1,37 @@
+[
+  {
+    "id": "t1",
+    "name": "Youssef El Amrani",
+    "role": "Permis B - 2024",
+    "content": "Une équipe extraordinaire ! J'ai obtenu mon permis du premier coup grâce à la pédagogie patiente et professionnelle des moniteurs.",
+    "rating": 5
+  },
+  {
+    "id": "t2",
+    "name": "Fatima Zahra Bennani",
+    "role": "Permis A - 2024",
+    "content": "Formation moto exceptionnelle. Les instructeurs sont à l'écoute et adaptent le rythme à chaque élève. Je recommande vivement !",
+    "rating": 5
+  },
+  {
+    "id": "t3",
+    "name": "Karim Tazi",
+    "role": "Code de la route - 2024",
+    "content": "Les supports numériques modernes m'ont vraiment aidé à maîtriser le code. Une approche pédagogique au top !",
+    "rating": 5
+  },
+  {
+    "id": "t4",
+    "name": "Salma Idrissi",
+    "role": "Permis B - 2025",
+    "content": "30 ans d'expérience, ça se sent ! Apprentissage de qualité dans une ambiance chaleureuse. Merci à toute l'équipe.",
+    "rating": 5
+  },
+  {
+    "id": "t5",
+    "name": "Mehdi Alaoui",
+    "role": "Formation accélérée - 2025",
+    "content": "Programme intensif parfaitement organisé. J'ai pu obtenir mon permis en deux semaines comme prévu. Bravo !",
+    "rating": 5
+  }
+]

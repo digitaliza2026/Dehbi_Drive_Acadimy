@@ -1,0 +1,56 @@
+[
+  {
+    "id": "g1",
+    "url": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800",
+    "title": "Cours de conduite",
+    "category": "formation"
+  },
+  {
+    "id": "g2",
+    "url": "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800",
+    "title": "Voiture école",
+    "category": "vehicules"
+  },
+  {
+    "id": "g3",
+    "url": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800",
+    "title": "Formation moto",
+    "category": "moto"
+  },
+  {
+    "id": "g4",
+    "url": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800",
+    "title": "Apprentissage pratique",
+    "category": "formation"
+  },
+  {
+    "id": "g5",
+    "url": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800",
+    "title": "Notre flotte",
+    "category": "vehicules"
+  },
+  {
+    "id": "g6",
+    "url": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800",
+    "title": "Salle de code",
+    "category": "centre"
+  },
+  {
+    "id": "g7",
+    "url": "https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=800",
+    "title": "Conduite urbaine",
+    "category": "formation"
+  },
+  {
+    "id": "g8",
+    "url": "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800",
+    "title": "Permis moto",
+    "category": "moto"
+  },
+  {
+    "id": "g9",
+    "url": "https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800",
+    "title": "Centre moderne",
+    "category": "centre"
+  }
+]

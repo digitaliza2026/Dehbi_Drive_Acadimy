@@ -1,0 +1,14 @@
+[
+  { "id": "s1", "day": "Lundi", "time": "08:00 - 10:00", "available": true },
+  { "id": "s2", "day": "Lundi", "time": "10:00 - 12:00", "available": true },
+  { "id": "s3", "day": "Lundi", "time": "14:00 - 16:00", "available": true },
+  { "id": "s4", "day": "Lundi", "time": "16:00 - 18:00", "available": true },
+  { "id": "s5", "day": "Mardi", "time": "08:00 - 10:00", "available": true },
+  { "id": "s6", "day": "Mardi", "time": "14:00 - 16:00", "available": true },
+  { "id": "s7", "day": "Mercredi", "time": "08:00 - 10:00", "available": true },
+  { "id": "s8", "day": "Mercredi", "time": "16:00 - 18:00", "available": true },
+  { "id": "s9", "day": "Jeudi", "time": "10:00 - 12:00", "available": true },
+  { "id": "s10", "day": "Vendredi", "time": "08:00 - 10:00", "available": true },
+  { "id": "s11", "day": "Samedi", "time": "09:00 - 11:00", "available": true },
+  { "id": "s12", "day": "Samedi", "time": "14:00 - 16:00", "available": true }
+]
