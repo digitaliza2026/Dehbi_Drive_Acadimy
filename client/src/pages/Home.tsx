@@ -6,6 +6,7 @@ import AnimatedCounter from '../components/AnimatedCounter';
 import SectionHeader from '../components/SectionHeader';
 import { SpeedSign, PrioritySign } from '../components/RoadSign';
 import { useSettings } from '../context/SettingsContext';
+import { apiUrl } from '../lib/apiBase';
 
 interface Formation { id: string; title: string; category: string; price: string; duration: string; description: string; icon: string; featured?: boolean; }
 interface Testimonial { id: string; name: string; role: string; content: string; rating: number; }
@@ -36,8 +37,8 @@ export default function Home() {
   const onHeroLeave = () => { mx.set(0); my.set(0); };
 
   useEffect(() => {
-    fetch('/api/formations').then(r => r.json()).then((d: Formation[]) => setFormations(d.filter(f => f.featured)));
-    fetch('/api/temoignages').then(r => r.json()).then(setTestimonials);
+    fetch(apiUrl('/api/formations')).then(r => r.json()).then((d: Formation[]) => setFormations(d.filter(f => f.featured)));
+    fetch(apiUrl('/api/temoignages')).then(r => r.json()).then(setTestimonials);
   }, []);
 
   useEffect(() => {

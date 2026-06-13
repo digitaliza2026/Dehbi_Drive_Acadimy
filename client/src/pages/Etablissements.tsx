@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { MapPin, Calendar, Star, ArrowRight } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { apiUrl } from '../lib/apiBase';
 
 interface Etab { id: string; name: string; city: string; province: string; year: number; description: string; featured?: boolean; }
 
@@ -21,7 +22,7 @@ export default function Etablissements() {
   const onLeave = () => { mx.set(0); my.set(0); };
 
   useEffect(() => {
-    fetch('/api/etablissements')
+    fetch(apiUrl('/api/etablissements'))
       .then(r => r.json())
       .then((data: Etab[]) => setItems(data.sort((a, b) => a.year - b.year)));
   }, []);

@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Calendar, Clock, User, Phone, Mail, BookOpen, CheckCircle2, AlertCircle } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import { DirectionSign } from '../components/RoadSign';
+import { apiUrl } from '../lib/apiBase';
 
 interface Formation { id: string; title: string; }
 interface Creneau { id: string; day: string; time: string; available: boolean; }
@@ -60,8 +61,8 @@ export default function Reservation() {
 
   useEffect(() => {
     Promise.all([
-      fetch('/api/formations').then(r => r.json()),
-      fetch('/api/creneaux').then(r => r.json())
+      fetch(apiUrl('/api/formations')).then(r => r.json()),
+      fetch(apiUrl('/api/creneaux')).then(r => r.json())
     ])
       .then(([formationsData, creneauxData]) => {
         setFormations(formationsData);
@@ -75,7 +76,7 @@ export default function Reservation() {
     e.preventDefault();
     setStatus('sending');
     try {
-      const res = await fetch('/api/reservations', {
+      const res = await fetch(apiUrl('/api/reservations'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, status: 'en_attente' })

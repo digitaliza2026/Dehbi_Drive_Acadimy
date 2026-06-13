@@ -20,7 +20,20 @@ if (!fs.existsSync(uploadsDir)) {
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true); // curl / same-origin
+    if (allowedOrigins.length === 0) return cb(null, true); // permissive default
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    cb(new Error(`Origin not allowed: ${origin}`));
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // Serve uploaded images
@@ -42,6 +55,7 @@ app.use('/api/messages', createCrudRouter('messages'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-app.listen(config.port, () => {
-  console.log(`🚗 Dehbi Drive Academy server running on http://localhost:${config.port}`);
+const PORT = process.env.PORT || config.port;
+app.listen(PORT, () => {
+  console.log(`🚗 Dehbi Drive Academy server running on port ${PORT}`);
 });

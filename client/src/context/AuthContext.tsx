@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { apiUrl } from '../lib/apiBase';
 
 interface AuthCtx {
   token: string | null;
@@ -22,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (token) {
-      fetch('/api/auth/verify', { headers: { Authorization: `Bearer ${token}` } })
+      fetch(apiUrl('/api/auth/verify'), { headers: { Authorization: `Bearer ${token}` } })
         .then(r => { if (!r.ok) logout(); })
         .catch(() => {});
     }
@@ -30,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (u: string, p: string) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(apiUrl('/api/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: u, password: p })

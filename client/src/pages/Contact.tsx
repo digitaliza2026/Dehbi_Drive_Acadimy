@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Send, Instagram, Facebook, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
+import { apiUrl } from '../lib/apiBase';
 
 export default function Contact() {
   const settings = useSettings();
@@ -12,7 +13,7 @@ export default function Contact() {
     e.preventDefault();
     setStatus('sending');
     try {
-      const res = await fetch('/api/messages', {
+      const res = await fetch(apiUrl('/api/messages'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, lu: false })

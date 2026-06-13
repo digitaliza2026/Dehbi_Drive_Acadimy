@@ -4,6 +4,7 @@ import { Car, Bike, BookOpen, Wrench, Shield, Award, Clock, Tag, Check } from 'l
 import SectionHeader from '../components/SectionHeader';
 import { WarningSign } from '../components/RoadSign';
 import { Link } from 'react-router-dom';
+import { apiUrl } from '../lib/apiBase';
 
 interface Formation { id: string; title: string; category: string; price: string; duration: string; description: string; icon: string; }
 
@@ -34,7 +35,7 @@ export default function Formations() {
   const onLeave = () => { mx.set(0); my.set(0); };
 
   useEffect(() => {
-    fetch('/api/formations').then(r => r.json()).then(setFormations);
+    fetch(apiUrl('/api/formations')).then(r => r.json()).then(setFormations);
   }, []);
 
   const filtered = filter === 'all' ? formations : formations.filter(f => f.category === filter);

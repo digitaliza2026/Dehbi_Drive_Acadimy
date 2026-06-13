@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Save, Building, Phone, Mail, MapPin, Hash, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { apiUrl } from '../../lib/apiBase';
 
 const getToken = () => localStorage.getItem('dehbi_token');
 
@@ -20,7 +21,7 @@ export default function AdminSettings() {
   const [showPw, setShowPw] = useState({ current: false, next: false, confirm: false });
 
   useEffect(() => {
-    fetch('/api/settings').then(r => r.json()).then(setSettings);
+    fetch(apiUrl('/api/settings')).then(r => r.json()).then(setSettings);
   }, []);
 
   const save = async (e: React.FormEvent) => {
@@ -28,7 +29,7 @@ export default function AdminSettings() {
     setSaving(true);
     setSaved(false);
     try {
-      const res = await fetch('/api/settings', {
+      const res = await fetch(apiUrl('/api/settings'), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify(settings)
@@ -56,7 +57,7 @@ export default function AdminSettings() {
     }
     setPwSaving(true);
     try {
-      const res = await fetch('/api/auth/change-password', {
+      const res = await fetch(apiUrl('/api/auth/change-password'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ currentPassword: pwForm.currentPassword, newPassword: pwForm.newPassword })

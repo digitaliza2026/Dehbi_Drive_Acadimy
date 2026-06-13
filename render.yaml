@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: dehbi-drive-academy-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    # Free tier has no persistent disk — uploads & admin edits reset on redeploy.
+    # Upgrade to Starter ($7/mo) and uncomment to keep data + uploads:
+    # disk:
+    #   name: data
+    #   mountPath: /opt/render/project/src/server/data
+    #   sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://darkred-wolverine-137175.hostingersite.com

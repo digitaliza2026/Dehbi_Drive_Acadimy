@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { apiUrl } from '../lib/apiBase';
 
 export interface Settings {
   schoolName: string;
@@ -39,7 +40,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch(apiUrl('/api/settings'))
       .then(r => r.json())
       .then(data => {
         if (data && Object.keys(data).length > 0) setSettings({ ...defaultSettings, ...data });

@@ -1,4 +1,5 @@
 import CrudManager from '../CrudManager';
+import { assetUrl } from '../../lib/apiBase';
 
 export default function AdminGalerie() {
   return (
@@ -19,7 +20,7 @@ export default function AdminGalerie() {
       renderRow={(item) => (
         <div className="flex items-center gap-3">
           <img
-            src={item.url}
+            src={assetUrl(item.url)}
             alt={item.title}
             loading="lazy"
             decoding="async"

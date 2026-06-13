@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
+import { apiUrl, assetUrl } from '../lib/apiBase';
 
 const getToken = () => localStorage.getItem('dehbi_token');
 
@@ -31,7 +32,7 @@ export default function ImageUpload({ value, onChange }: Props) {
     formData.append('image', file);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/upload');
+    xhr.open('POST', apiUrl('/api/upload'));
     xhr.setRequestHeader('Authorization', `Bearer ${getToken()}`);
 
     xhr.upload.onprogress = (e) => {
@@ -82,7 +83,7 @@ export default function ImageUpload({ value, onChange }: Props) {
       <div className="flex flex-col gap-2">
         <div className="relative inline-block">
           <img
-            src={value}
+            src={assetUrl(value)}
             alt="Aperçu"
             loading="lazy"
             decoding="async"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn } from 'lucide-react';
+import { apiUrl, assetUrl } from '../lib/apiBase';
 
 interface Photo { id: string; url: string; title: string; category: string; }
 
@@ -9,7 +10,7 @@ export default function Galerie() {
   const [selected, setSelected] = useState<Photo | null>(null);
 
   useEffect(() => {
-    fetch('/api/galerie').then(r => r.json()).then(setPhotos);
+    fetch(apiUrl('/api/galerie')).then(r => r.json()).then(setPhotos);
   }, []);
 
   return (
@@ -52,7 +53,7 @@ export default function Galerie() {
                 className="break-inside-avoid relative group cursor-pointer rounded-2xl overflow-hidden shadow-lg"
               >
                 <img
-                  src={p.url}
+                  src={assetUrl(p.url)}
                   alt={p.title}
                   loading="lazy"
                   decoding="async"
@@ -90,7 +91,7 @@ export default function Galerie() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
               onClick={e => e.stopPropagation()}
-              src={selected.url}
+              src={assetUrl(selected.url)}
               alt={selected.title}
               className="max-h-[85vh] max-w-[90vw] rounded-2xl shadow-2xl"
             />
